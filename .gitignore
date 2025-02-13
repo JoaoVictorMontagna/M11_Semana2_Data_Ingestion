@@ -1,0 +1,46 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribuição / Empacotamento
+build/
+dist/
+*.egg-info/
+
+# Diretórios de ambiente virtual (caso estejam na raiz do projeto)
+.env/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos de lock do Poetry
+# Para aplicações é recomendado versionar o poetry.lock.
+# Descomente a linha abaixo se for criar uma biblioteca.
+# poetry.lock
+
+# Arquivos de configuração local
+.env
+
+# Arquivos e pastas de cache e testes
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+
+# Logs
+*.log
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Pastas de IDEs / Editores
+.vscode/
+.idea/
