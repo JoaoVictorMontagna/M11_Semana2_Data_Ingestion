@@ -19,7 +19,7 @@ SUPABASE_API_KEY = os.getenv("SUPABASE_API_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_API_KEY)
 
 def callback(ch, method, properties, body):
-    """Processa mensagens do RabbitMQ e insere nas tabelas bronze e prata do Supabase."""
+
     try:
         # Decodificar a mensagem recebida
         dados = json.loads(body.decode())
@@ -44,7 +44,8 @@ def callback(ch, method, properties, body):
         print(f"Erro ao processar/inserir mensagem: {e}")
 
 def iniciar_consumidor():
-    """Inicia o consumidor do RabbitMQ."""
+
+
     connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
     channel = connection.channel()
     channel.queue_declare(queue=RABBITMQ_QUEUE)

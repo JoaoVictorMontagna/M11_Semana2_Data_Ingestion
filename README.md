@@ -1,53 +1,77 @@
-# Data Ingestion com RabbitMQ e Supabase
 
-Este projeto implementa um pipeline simples de ingestão de dados utilizando RabbitMQ para mensageria e Supabase para armazenamento. O fluxo funciona assim:
+# Documentação de Configuração e Execução
 
-1. O **Producer** gera e envia dados aleatórios para a fila RabbitMQ.
-2. O **Consumer** consome os dados e os insere em duas camadas no Supabase:
-   - **Camada Bronze**: Armazena o dado bruto como foi recebido.
-   - **Camada Prata**: Armazena o dado com uma **tag** indicando a fonte de origem.
+## Pré-requisitos
+- Docker e Docker Compose instalados
+- Poetry instalado
 
-Os dados são gerados com a biblioteca Faker para facilitar a simulação de entradas realistas.
+---
 
-## Como Rodar
+## Passo 1 – Configurar o Ambiente
+1. Clone ou copie o projeto.
+2. Instale as dependências:
+   ```bash
+   poetry install
+   ```
 
-### Instalar as Dependências
-```sh
-poetry install
-```
+---
 
-### Iniciar o RabbitMQ (se estiver no Docker)
-```sh
-docker start rabbitmq
-```
+## Passo 2 – Configurar e Iniciar o RabbitMQ
+1. Crie o arquivo `docker-compose.yml`:
+   ```yaml
+   version: '3.8'
 
-Se não estiver configurado, rode:
-```sh
-docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-```
+   services:
+     rabbitmq:
+       image: rabbitmq:3-management
+       container_name: rabbitmq
+       ports:
+         - "5672:5672"
+         - "15672:15672"
+   ```
 
-### Rodar o Producer
-```sh
-poetry run python producer.py
-```
+2. Suba o RabbitMQ:
+   ```bash
+   docker-compose up -d
+   ```
 
-### Rodar o Consumer
-```sh
-poetry run python consumer.py
-```
+3. Verifique se está rodando:
+   ```bash
+   docker ps | grep rabbitmq
+   ```
 
-## Prints
+4. Acesse o painel RabbitMQ:
+   - URL: `http://localhost:15672`
+   - Login: `guest` | Senha: `guest`
 
-### RabbitMQ
-Producer
-![Producer](assets/producer.png)
-Consumer
-![Consumer](assets/consumer.png)
+---
 
-### Supabase
-Bronze
-![Camada Bronze](assets/supabase_bronze.png)
-Prata
-![Camada Prata](assets/supabase_prata.png)
+## Passo 3 – Executar Producer e Consumer
+1. Abra dois terminais.
+2. No primeiro terminal, execute o consumer:
+   ```bash
+   poetry run python consumer.py
+   ```
+3. No segundo terminal, execute o producer:
+   ```bash
+   poetry run python producer.py
+   ```
 
+---
 
+## Passo 4 – Parar os Serviços
+1. Pare o RabbitMQ:
+   ```bash
+   docker-compose down
+   ```
+
+---
+
+## Observações
+- O nome do container é definido como `rabbitmq` para evitar nomes aleatórios.
+- Verifique o estado do Docker caso ele não abra corretamente:
+   - Finalize os processos no Gerenciador de Tarefas e reinicie.
+   - Limpe containers e redes corrompidas:
+     ```bash
+     docker system prune -a
+     ```

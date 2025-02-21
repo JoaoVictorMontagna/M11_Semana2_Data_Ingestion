@@ -17,10 +17,12 @@ RABBITMQ_QUEUE = os.getenv("RABBITMQ_QUEUE")
 faker = Faker()
 
 # Lista de fontes simuladas
+
 FONTES = ["fonte_1", "fonte_2", "fonte_3", "fonte_4"]
 
 def gerar_dado():
-    """Gera um JSON com dados aleatórios e identifica a fonte."""
+
+
     return {
         "id": faker.uuid4(),
         "nome": faker.name(),
@@ -33,7 +35,7 @@ def gerar_dado():
     }
 
 def enviar_dado():
-    """Envia mensagens aleatórias para o RabbitMQ com delay."""
+
     connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
     channel = connection.channel()
     channel.queue_declare(queue=RABBITMQ_QUEUE)
@@ -42,13 +44,13 @@ def enviar_dado():
         dado = gerar_dado()
         mensagem = json.dumps(dado)
         channel.basic_publish(exchange='', routing_key=RABBITMQ_QUEUE, body=mensagem)
-
         print(f"Mensagem enviada: {mensagem}")
 
         # Adicionar um delay aleatório entre 1 e 5 segundos
         delay = random.randint(1, 5)
         print(f"Aguardando {delay} segundos antes do próximo envio...")
         time.sleep(delay)
+
 
 if __name__ == "__main__":
     enviar_dado()
